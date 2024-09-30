@@ -14,7 +14,7 @@ MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     const collection = db.collection(process.env.collection_mongodb);
 
     // Endpoint to insert data
-    app.post('/data', (req, res) => {
+    app.post('/api/data', (req, res) => {
       const data = req.body;
       collection.insertOne(data)
         .then(result => {
