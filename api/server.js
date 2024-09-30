@@ -48,7 +48,4 @@ MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   })
   .catch(error => console.error(error));
 
-module.exports = app;
-module.exports.handler = (req, res) => {
-  app(req, res);
-};
+  
