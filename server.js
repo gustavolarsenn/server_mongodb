@@ -27,6 +27,9 @@ MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
         });
     });
 
+    app.get('/', (req, res) => {
+      res.sendFile(__dirname + '/index.html');
+    });
     // Start the server
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);
