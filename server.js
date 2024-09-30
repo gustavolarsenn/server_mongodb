@@ -10,9 +10,8 @@ const uri = `mongodb+srv://${process.env.user_mongodb}:${process.env.password_mo
 app.use(express.json());
 
 
-require("./mongo.js")(app);
+require("./api/mongo.js")(app);
 // Connect to MongoDB
-
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
