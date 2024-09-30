@@ -4,7 +4,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // MongoDB connection string
-const uri = "mongodb+srv://williamgl02:bmgr3foZlaPF5bTW@iotchuva.gl8zm.mongodb.net/iotChuvaDB?retryWrites=true&w=majority&appName=iotChuva";
+const uri = `mongodb+srv://${process.env.user_mongodb}:${process.env.password_mongodb}@${process.env.project_mongodb}.gl8zm.mongodb.net/${process.env.db_mongodb}?retryWrites=true&w=majority&appName=${process.env.app_name_mongodb}`;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
@@ -12,8 +12,8 @@ app.use(express.json());
 // Connect to MongoDB
 MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(client => {
-    const db = client.db('iotChuvaDB');
-    const collection = db.collection('temperaturaDados');
+    const db = client.db(process.env.db_mongodb);
+    const collection = db.collection(process.env.collection_mongodb);
 
     // Endpoint to insert data
     app.post('/data', (req, res) => {
