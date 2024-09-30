@@ -10,42 +10,40 @@ const uri = `mongodb+srv://${process.env.user_mongodb}:${process.env.password_mo
 app.use(express.json());
 
 
-require("./mongo.js")(app);
-// Connect to MongoDB
+// require("./mongo.js")(app);
+// // Connect to MongoDB
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
-});
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+// app.get('/', (req, res) => {
+//   res.sendFile(__dirname + '/index.html');
+// });
+// // Start the server
+// app.listen(port, () => {
+//   console.log(`Server running on port ${port}`);
+// });
 
+MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(client => {
+    const db = client.db(process.env.db_mongodb);
+    const collection = db.collection(process.env.collection_mongodb);
 
+    // Endpoint to insert data
+    app.post('/data', (req, res) => {
+      const data = req.body;
+      collection.insertOne(data)
+        .then(result => {
+          res.status(200).send('Dados inseridos');
+        })
+        .catch(error => {
+          res.status(500).send('Erro ao inserir dados');
+        });
+    });
 
-// MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
-//   .then(client => {
-//     const db = client.db(process.env.db_mongodb);
-//     const collection = db.collection(process.env.collection_mongodb);
-
-//     // Endpoint to insert data
-//     app.post('/data', (req, res) => {
-//       const data = req.body;
-//       collection.insertOne(data)
-//         .then(result => {
-//           res.status(200).send('Dados inseridos');
-//         })
-//         .catch(error => {
-//           res.status(500).send('Erro ao inserir dados');
-//         });
-//     });
-
-//     app.get('/', (req, res) => {
-//       res.sendFile(__dirname + '/index.html');
-//     });
-//     // Start the server
-//     app.listen(port, () => {
-//       console.log(`Server running on port ${port}`);
-//     });
-//   })
-//   .catch(error => console.error(error));
+    app.get('/', (req, res) => {
+      res.sendFile(__dirname + '/index.html');
+    });
+    // Start the server
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
+    });
+  })
+  .catch(error => console.error(error));
