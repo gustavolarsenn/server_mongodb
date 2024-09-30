@@ -1,10 +1,8 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
 const app = express();
+const uri = process.env.MONGODB_URI;
 const port = process.env.PORT || 3000;
-
-// MongoDB connection string
-const uri = `mongodb+srv://${process.env.user_mongodb}:${process.env.password_mongodb}@${process.env.project_mongodb}.gl8zm.mongodb.net/${process.env.db_mongodb}?retryWrites=true&w=majority&appName=${process.env.app_name_mongodb}`;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
@@ -30,9 +28,11 @@ MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     app.get('/', (req, res) => {
       res.sendFile(__dirname + '/index.html');
     });
-    // Start the server
-    app.listen(port, () => {
-      console.log(`Server running on port ${port}`);
-    });
   })
   .catch(error => console.error(error));
+
+// Export the app as a serverless function
+module.exports = app;
+module.exports.handler = (req, res) => {
+  app(req, res);
+};
