@@ -10,10 +10,8 @@ const uri = `mongodb+srv://${process.env.user_mongodb}:${process.env.password_mo
 app.use(express.json());
 
 async function fetchRainData(){
-  const ID_CIDADE = '4970'
-  const TOKEN_CLIMATEMPO = '247b20282967aedbad798b36adc5e6ab'
   try{
-    const res = await fetch(`http://apiadvisor.climatempo.com.br/api/v1/forecast/locale/${ID_CIDADE}/days/15?token=${TOKEN_CLIMATEMPO}`)
+    const res = await fetch(`http://apiadvisor.climatempo.com.br/api/v1/forecast/locale/${process.env.id_cidade}/days/15?token=${process.env.token_climatempo}`)
     
     const data = await res.json()
 
@@ -50,7 +48,7 @@ MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
       const rainData = await fetchRainData()
 
       data.rainData = rainData
-      
+
       collection.insertOne(data)
         .then(result => {
           res.status(200).send('Dados inseridos');
